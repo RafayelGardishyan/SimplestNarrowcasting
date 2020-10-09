@@ -19,11 +19,23 @@ def screen(request, screen_id):
     return render(request, "screen.html", context)
 
 
+def get_weather():
+    response = requests.get("http://api.weatherapi.com/v1/current.json?key=d4e994c56a6a45aba08105348200910&q=53.220638,6.571441")
+    response = response.json()
+
+    temp = int(response["current"]["temp_c"])
+    icon = response["current"]["condition"]["icon"][2:]
+
+    return {"temp": temp, "icon": icon}
+
+
 def get_next_image(request, screen_id):
     try:
         screen = Screen.objects.get(pk=screen_id)
     except Screen.DoesNotExist:
         return redirect('/')
+
+
 
     response = requests.get("http://worldtimeapi.org/api/timezone/Europe/Amsterdam")
     response = response.json()
@@ -40,7 +52,8 @@ def get_next_image(request, screen_id):
             "type": view.file_type,
             "url": view.file.url,
             "sctext": screen.scroll_text,
-            "time": time
+            "time": time,
+            "weather": get_weather()
         }), content_type='text/plain')
 
 

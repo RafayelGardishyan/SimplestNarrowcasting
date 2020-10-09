@@ -25,6 +25,11 @@ class Viewable(models.Model):
     file = models.FileField(upload_to="viewables")
     enabled = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = 'dia'
+        verbose_name_plural = "dia's"
+
+
     def __str__(self):
         return self.title
 
@@ -37,6 +42,10 @@ class Screen(models.Model):
     time = models.IntegerField(verbose_name="Timeout (for images and HTML pages)", default=5000)
     screen_pin = models.IntegerField(default=random.randint(1000, 9999))
     current_view_id = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Scherm'
+        verbose_name_plural = "Schermen"
 
     def __str__(self):
         return self.name

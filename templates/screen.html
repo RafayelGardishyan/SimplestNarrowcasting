@@ -87,13 +87,11 @@
         transform: translateX(-100%);
         }
         }
-
-
     </style>
 </head>
 <body>
 <div id="container">
-<h1 id="title">PG TV &nbsp;[ <span id="time"></span> ]</h1>
+<h1 id="title">PG TV &nbsp;[ <span id="time"></span> | <span id="temp">16</span>° <img id="weather_icon" src=""> ]</h1>
 <div id="image">
 <img id="current_image_view" src="{{ screen.get_view.file.url }}" alt="">
 </div>
@@ -133,15 +131,23 @@
         }
     }, {{ screen.time }})
 
+    var json;
+
     function loadDoc() {
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-        var json = JSON.parse(this.responseText)
+        json = JSON.parse(this.responseText)
 
-
+        document.getElementById("temp").innerText = json.weather.temp
+        document.getElementById("weather_icon").src = "https://" + json.weather.icon
 
         document.getElementById("sctext").innerText = json.sctext
+
+        if (json.time == "0:00" || json.time == "00:00"){
+            location.reload();
+        }
+
         document.getElementById('time').innerHTML = json.time;
         if (json.type === "img"){
         timeout = true;

@@ -23,3 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("runner.urls"))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "PG TV"
+admin.site.site_title = "PG TV Beheerdersscherm"
+admin.site.index_title = "Welkom bij PG TV Beheerdersscherm"
