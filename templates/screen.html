@@ -42,6 +42,10 @@
           height: 100%;
         }
 
+        #temp, #deg {
+            color: #ffd752;
+        }
+
 
         .scroll-left {
         height: 50px;
@@ -91,7 +95,7 @@
 </head>
 <body>
 <div id="container">
-<h1 id="title">PG TV &nbsp;[ <span id="time"></span> | <span id="temp">16</span>° <img id="weather_icon" src=""> ]</h1>
+<h1 id="title">PG TV &nbsp;[ <span id="time"></span> | <span id="temp"></span><span id="deg">°C</span></span> <img id="weather_icon" src=""> ]</h1>
 <div id="image">
 <img id="current_image_view" src="{{ screen.get_view.file.url }}" alt="">
 </div>

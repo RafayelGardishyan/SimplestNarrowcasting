@@ -3,8 +3,9 @@ import requests
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.core import serializers
 
-from runner.models import Screen
+from runner.models import Screen, Automation
 
 
 def screen(request, screen_id):
@@ -17,6 +18,10 @@ def screen(request, screen_id):
         "screen": screen
     }
     return render(request, "screen.html", context)
+
+
+def internal_metadata(request, screen_pin):
+    return HttpResponse(serializers.serialize("json", [Screen.objects.get(screen_pin=screen_pin)]), content_type="text/plain")
 
 
 def get_weather():
@@ -44,6 +49,9 @@ def get_next_image(request, screen_id):
 
     a = datetime.strptime(response["datetime"][:-6], "%Y-%m-%dT%H:%M:%S.%f")
 
+    for atmn in Automation.objects.all():
+        atmn.execute(a)
+
     time = (str(a.hour) if len(str(a.hour)) == 2 else "0" + str(a.hour)) + ":" + (str(a.minute) if len(str(a.minute)) == 2 else "0" + str(a.minute))
 
     view = screen.get_view()
@@ -53,7 +61,8 @@ def get_next_image(request, screen_id):
             "url": view.file.url,
             "sctext": screen.scroll_text,
             "time": time,
-            "weather": get_weather()
+            "weather": get_weather(),
+            "screen": json.loads(serializers.serialize("json", [screen]))
         }), content_type='text/plain')
 
 
